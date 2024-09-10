@@ -160,14 +160,11 @@ if (!isLoggedIn) {
 }
 
 return (
-  <div className="container">
-    <Nav />
-    <br /><br /><br /><br />
-    <div className='title_search'>
-      <div className='title'>
-        <h1>Product Matrix</h1>
-      </div>
-      <div className="search-container">
+  <div className="page-container">
+    <Nav /><br /><br /><br /><br /><br />
+    <div className='header-section'>
+      <h1 className='page-title'>Product Matrix</h1><br />
+      <div className="search-area">
         <label htmlFor="search" className="search-label">Search: </label>
         <input
           id="search"
@@ -179,8 +176,8 @@ return (
         />
       </div>
     </div>
-    <div>
-      <select className='selects' onChange={handleItemsPerPageChange} value={itemsPerPage}>
+    <div className="items-per-page">
+      <select className='items-select' onChange={handleItemsPerPageChange} value={itemsPerPage}>
         <option value="1">1 row</option>
         <option value="5">5 rows</option>
         <option value="10">10 rows</option>
@@ -188,169 +185,177 @@ return (
         <option value={products.length}>All</option>
       </select>
     </div>
-    <table className="product-table">
-      <thead>
-        <tr>
-          <th>Product Id</th>
-          <th>Project</th>
-          <th>Status</th>
-          <th>Customer</th>
-          <th>Part Description</th>
-          <th>Cast RR</th>
-          <th>Mach RR</th>
-          <th>Assy RR</th>
-          <th>Location</th>
-          <th>Material</th>
-          <th>Material Rev</th>
-          <th>Cast Part No</th>
-          <th>Cast Drawing Rev</th>
-          <th>Cast Part Rev</th>
-          <th>Cast Weight</th>
-          <th>Cast Approval</th>
-          <th>Mach Part No</th>
-          <th>Mach Drawing Rev</th>
-          <th>Mach Part Rev</th>
-          <th>Mach Weight</th>
-          <th>Mach Approval</th>
-          <th>Assy Part No</th>
-          <th>Assy Drawing Rev</th>
-          <th>Assy Part Rev</th>
-          <th>Assy Weight</th>
-          <th>Assy Approval</th>
-          <th>Ship Part No</th>
-          <th>HS Part No</th>
-          <th>Project Status</th>
-          <th>SOP Date</th>
-          <th>PMPD</th>
-          <th>Sale Type</th>
-          <th>Install Capacity</th>
-          <th>Box Quantity</th>
-          <th>Created Date</th>
-          <th>Created By</th>
-          <th>Updated Date</th>
-          <th>Updated By</th>
-          <th>Edit</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        {displayedProducts.length > 0 ? (
-          displayedProducts.map((product) => (
-            <tr key={product.product_Id}>
-              <td>{product.product_Id}</td>
-              <td>{product.project}</td>
-              <td>{product.status}</td>
-              <td>{product.customer}</td>
-              <td>{product.partDesc}</td>
-              <td>{product.castRR}</td>
-              <td>{product.machRR}</td>
-              <td>{product.assyRR}</td>
-              <td>{product.location}</td>
-              <td>{product.material}</td>
-              <td>{product.matRev}</td>
-              <td>{product.castPartNo}</td>
-              <td>{product.castDrawRev}</td>
-              <td>{product.castPartRev}</td>
-              <td>{product.castWeight}</td>
-              <td>{product.castApproval}</td>
-              <td>{product.machPartNo}</td>
-              <td>{product.machDrawRev}</td>
-              <td>{product.machPartRev}</td>
-              <td>{product.machWeight}</td>
-              <td>{product.machApproval}</td>
-              <td>{product.assyPartNo}</td>
-              <td>{product.assyDrawRev}</td>
-              <td>{product.assyPartRev}</td>
-              <td>{product.assyWeight}</td>
-              <td>{product.assyApproval}</td>
-              <td>{product.shipPartNo}</td>
-              <td>{product.hsPartNo}</td>
-              <td>{product.projectStatus}</td>
-              <td>{product.sopDate}</td>
-              <td>{product.pmpd}</td>
-              <td>{product.saleType}</td>
-              <td>{product.installCapacity}</td>
-              <td>{product.boxQuantity}</td>
-              <td>{product.createdDate}</td>
-              <td>{product.createdBy}</td>
-              <td>{product.updatedDate}</td>
-              <td>{product.updatedBy}</td>
-              <td>
-                <button onClick={() => handleEdit(product)}>Edit</button>
-              </td>
-              <td>
-                <button onClick={() => handleDelete(product.product_Id)}>Delete</button>
-              </td>
-            </tr>
-          ))
-        ) : (
+    <div className="table-wrapper">
+      <table className="product-table">
+        <thead>
           <tr>
-            <td colSpan="34">No products found</td>
+            <th>Product Id</th>
+            <th>Project</th>
+            <th>Status</th>
+            <th>Customer</th>
+            <th>Part Description</th>
+            <th>Cast RR</th>
+            <th>Mach RR</th>
+            <th>Assy RR</th>
+            <th>Location</th>
+            <th>Material</th>
+            <th>Material Rev</th>
+            <th>Cast Part No</th>
+            <th>Cast Drawing Rev</th>
+            <th>Cast Part Rev</th>
+            <th>Cast Weight</th>
+            <th>Cast Approval</th>
+            <th>Mach Part No</th>
+            <th>Mach Drawing Rev</th>
+            <th>Mach Part Rev</th>
+            <th>Mach Weight</th>
+            <th>Mach Approval</th>
+            <th>Assy Part No</th>
+            <th>Assy Drawing Rev</th>
+            <th>Assy Part Rev</th>
+            <th>Assy Weight</th>
+            <th>Assy Approval</th>
+            <th>Ship Part No</th>
+            <th>HS Part No</th>
+            <th>Project Status</th>
+            <th>SOP Date</th>
+            <th>PMPD</th>
+            <th>Sale Type</th>
+            <th>Install Capacity</th>
+            <th>Box Quantity</th>
+            <th>Created Date</th>
+            <th>Created By</th>
+            <th>Updated Date</th>
+            <th>Updated By</th>
+            <th>Edit</th>
+            <th>Delete</th>
           </tr>
-        )}
-      </tbody>
-    </table>
-    <div className='pagination'>
-      <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-        Previous
+        </thead>
+        <tbody>
+          {displayedProducts.length > 0 ? (
+            displayedProducts.map((product) => (
+              <tr key={product.product_Id}>
+                <td>{product.product_Id}</td>
+                <td>{product.project}</td>
+                <td>{product.status}</td>
+                <td>{product.customer}</td>
+                <td>{product.partDesc}</td>
+                <td>{product.castRR}</td>
+                <td>{product.machRR}</td>
+                <td>{product.assyRR}</td>
+                <td>{product.location}</td>
+                <td>{product.material}</td>
+                <td>{product.matRev}</td>
+                <td>{product.castPartNo}</td>
+                <td>{product.castDrawRev}</td>
+                <td>{product.castPartRev}</td>
+                <td>{product.castWeight}</td>
+                <td>{product.castApproval}</td>
+                <td>{product.machPartNo}</td>
+                <td>{product.machDrawRev}</td>
+                <td>{product.machPartRev}</td>
+                <td>{product.machWeight}</td>
+                <td>{product.machApproval}</td>
+                <td>{product.assyPartNo}</td>
+                <td>{product.assyDrawRev}</td>
+                <td>{product.assyPartRev}</td>
+                <td>{product.assyWeight}</td>
+                <td>{product.assyApproval}</td>
+                <td>{product.shipPartNo}</td>
+                <td>{product.hsPartNo}</td>
+                <td>{product.projStatus}</td>
+                <td>{product.sopDate}</td>
+                <td>{product.pmpd}</td>
+                <td>{product.saleType}</td>
+                <td>{product.installCap}</td>
+                <td>{product.boxQty}</td>
+                <td>{product.createdDate}</td>
+                <td>{product.createdBy}</td>
+                <td>{product.updatedDate}</td>
+                <td>{product.updatedBy}</td>
+                <td>
+                  <button
+                    className="edit-button"
+                    onClick={() => handleEdit(product)}
+                  >
+                    Edit
+                  </button>
+                </td>
+                <td>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete(product.product_Id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="35">No products found</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div><br /><br />
+    <div className='psc'>
+    <div class="pagination-info">
+        <span class="pagination-info-text">Showing <span id="rows-shown">10</span> of <span id="total-rows">48</span> rows - Page <span id="current-page">1</span> of <span id="total-pages">5</span></span>
+    </div>
+
+    <div className="pagination-container">
+      <button
+        className="pagination-button"
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        &laquo; Prev
       </button>
       {getPaginationButtons().map((page, index) => (
         <button
           key={index}
-          onClick={() => typeof page === 'number' && handlePageChange(page)}
-          className={typeof page === 'number' && page === currentPage ? 'active' : ''}
+          className={`pagination-button ${page === currentPage ? 'active' : ''}`}
+          onClick={() => page !== '...' && handlePageChange(page)}
         >
           {page}
         </button>
       ))}
-      <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-        Next
+      <button
+        className="pagination-button"
+        onClick={() => handlePageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        Next &raquo;
       </button>
     </div>
-    {isEditPopupOpen && editProduct && (
-      <div className="popup">
-        <h2>Edit Product</h2>
-        <form onSubmit={(e) => { e.preventDefault(); handleEditSubmit(); }}>
-          <input type="text" name="project" value={editProduct.project || ''} onChange={handleInputChange} />
-          <input type="text" name="status" value={editProduct.status || ''} onChange={handleInputChange} />
-          <input type="text" name="customer" value={editProduct.customer || ''} onChange={handleInputChange} />
-          <input type="text" name="partDesc" value={editProduct.partDesc || ''} onChange={handleInputChange} />
-          <input type="text" name="castRR" value={editProduct.castRR || ''} onChange={handleInputChange} />
-          <input type="text" name="machRR" value={editProduct.machRR || ''} onChange={handleInputChange} />
-          <input type="text" name="assyRR" value={editProduct.assyRR || ''} onChange={handleInputChange} />
-          <input type="text" name="location" value={editProduct.location || ''} onChange={handleInputChange} />
-          <input type="text" name="material" value={editProduct.material || ''} onChange={handleInputChange} />
-          <input type="text" name="matRev" value={editProduct.matRev || ''} onChange={handleInputChange} />
-          <input type="text" name="castPartNo" value={editProduct.castPartNo || ''} onChange={handleInputChange} />
-          <input type="text" name="castDrawRev" value={editProduct.castDrawRev || ''} onChange={handleInputChange} />
-          <input type="text" name="castPartRev" value={editProduct.castPartRev || ''} onChange={handleInputChange} />
-          <input type="text" name="castWeight" value={editProduct.castWeight || ''} onChange={handleInputChange} />
-          <input type="text" name="castApproval" value={editProduct.castApproval || ''} onChange={handleInputChange} />
-          <input type="text" name="machPartNo" value={editProduct.machPartNo || ''} onChange={handleInputChange} />
-          <input type="text" name="machDrawRev" value={editProduct.machDrawRev || ''} onChange={handleInputChange} />
-          <input type="text" name="machPartRev" value={editProduct.machPartRev || ''} onChange={handleInputChange} />
-          <input type="text" name="machWeight" value={editProduct.machWeight || ''} onChange={handleInputChange} />
-          <input type="text" name="machApproval" value={editProduct.machApproval || ''} onChange={handleInputChange} />
-          <input type="text" name="assyPartNo" value={editProduct.assyPartNo || ''} onChange={handleInputChange} />
-          <input type="text" name="assyDrawRev" value={editProduct.assyDrawRev || ''} onChange={handleInputChange} />
-          <input type="text" name="assyPartRev" value={editProduct.assyPartRev || ''} onChange={handleInputChange} />
-          <input type="text" name="assyWeight" value={editProduct.assyWeight || ''} onChange={handleInputChange} />
-          <input type="text" name="assyApproval" value={editProduct.assyApproval || ''} onChange={handleInputChange} />
-          <input type="text" name="shipPartNo" value={editProduct.shipPartNo || ''} onChange={handleInputChange} />
-          <input type="text" name="hsPartNo" value={editProduct.hsPartNo || ''} onChange={handleInputChange} />
-          <input type="text" name="projectStatus" value={editProduct.projectStatus || ''} onChange={handleInputChange} />
-          <input type="text" name="sopDate" value={editProduct.sopDate || ''} onChange={handleInputChange} />
-          <input type="text" name="pmpd" value={editProduct.pmpd || ''} onChange={handleInputChange} />
-          <input type="text" name="saleType" value={editProduct.saleType || ''} onChange={handleInputChange} />
-          <input type="text" name="installCapacity" value={editProduct.installCapacity || ''} onChange={handleInputChange} />
-          <input type="text" name="boxQuantity" value={editProduct.boxQuantity || ''} onChange={handleInputChange} />
-          <input type="text" name="createdDate" value={editProduct.createdDate || ''} onChange={handleInputChange} />
-          <input type="text" name="createdBy" value={editProduct.createdBy || ''} onChange={handleInputChange} />
-          <input type="text" name="updatedDate" value={editProduct.updatedDate || ''} onChange={handleInputChange} />
-          <input type="text" name="updatedBy" value={editProduct.updatedBy || ''} onChange={handleInputChange} />
-          <button type="submit">Save</button>
-          <button type="button" onClick={() => setIsEditPopupOpen(false)}>Cancel</button>
-        </form>
+    </div>
+    {isEditPopupOpen && (
+      <div className="edit-popup">
+        <div className="edit-popup-content">
+          <h2>Edit Product</h2>
+          <label htmlFor="product_Id">Product ID</label>
+          <input
+            id="product_Id"
+            name="product_Id"
+            type="text"
+            value={editProduct.product_Id || ''}
+            readOnly
+          />
+          <label htmlFor="project">Project</label>
+          <input
+            id="project"
+            name="project"
+            type="text"
+            value={editProduct.project || ''}
+            onChange={handleInputChange}
+          />
+          {/* Add more input fields as needed */}
+          <div className="edit-popup-buttons">
+            <button onClick={handleEditSubmit}>Save</button>
+            <button onClick={() => setIsEditPopupOpen(false)}>Cancel</button>
+          </div>
+        </div>
       </div>
     )}
   </div>
@@ -358,4 +363,3 @@ return (
 };
 
 export default Page;
-
