@@ -1,0 +1,502 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL1")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model BOM_Details {
+  Details_Id    Int       @default(autoincrement())
+  BOM_Id        Int?
+  Version_Id    Int
+  BOM_Code      String    @db.VarChar(50)
+  Material_Id   Int
+  Material_Code String?   @db.VarChar(50)
+  Quantity      Float?
+  CreatedBy     String?   @db.VarChar(10)
+  CreatedDate   DateTime? @default(now(), map: "DF_BOM_Details_CreatedDate") @db.DateTime
+  UpdatedBy     String?   @db.VarChar(10)
+  UpdatedDate   DateTime? @db.DateTime
+
+  @@ignore
+}
+
+model BOM_Master {
+  BOM_Id      Int       @id(map: "PK_BOM_Master") @default(autoincrement())
+  BOM_Name    String    @db.VarChar(20)
+  BOM_Code    String?   @db.VarChar(50)
+  CreatedBy   String?   @db.VarChar(10)
+  CreatedDate DateTime? @default(now(), map: "DF_BOM_Master_CreatedDate") @db.DateTime
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model BOM_Percentage {
+  ID            Int       @default(autoincrement())
+  Material_Code String    @db.VarChar(50)
+  BOM_Code      String    @db.VarChar(50)
+  Quantity      Float
+  CreatedBy     String?   @db.VarChar(10)
+  CReatedDate   DateTime? @default(now(), map: "DF_BOM_Percentage_CReatedDate") @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model BOM_Version {
+  Version_Id  Int       @default(autoincrement())
+  BOM_Id      Int?
+  BOM_Code    String    @db.VarChar(50)
+  Version_No  Int
+  Status      Int       @default(1, map: "DF_BOM_Version_Status")
+  CreatedBy   String?   @db.VarChar(10)
+  CreatedDate DateTime? @default(now(), map: "DF_BOM_Version_CreatedDate") @db.DateTime
+
+  @@ignore
+}
+
+model BomDetailsView {
+  Material_Id   Int     @id(map: "PK_BomDetailsView") @default(autoincrement())
+  Material_Name String? @db.VarChar(20)
+  BOM1Quantity  Float?
+  BOM2Quantity  Float?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ChildPartRequest {
+  SLno           Int     @default(autoincrement())
+  ChldPt_No      String? @db.VarChar(100)
+  ChldPt_Erpcode String? @db.VarChar(100)
+  Sep_24         Int?    @map("Sep 24")
+  Oct_24         Int?    @map("Oct 24")
+  Nov_24         Int?    @map("Nov 24")
+  Dec_24         Int?    @map("Dec 24")
+  Jan_25         Int?    @map("Jan 25")
+  Feb_25         Int?    @map("Feb 25")
+
+  @@ignore
+}
+
+model Exclude_Parts_Forecast {
+  Excl_Id     Int       @id(map: "PK_Exclude_Parts_Forecast") @default(autoincrement())
+  Part_No     String?   @db.VarChar(20)
+  Months      String?   @db.VarChar(200)
+  MonthNames  String?   @db.VarChar(200)
+  CreatedBy   String?   @db.VarChar(10)
+  CreatedDate DateTime? @db.DateTime
+}
+
+model Filter_Master {
+  Filter_Id          Int       @id(map: "PK_Filter_Master") @default(autoincrement())
+  Filter_Code        String    @db.VarChar(50)
+  Filter_Description String    @db.NVarChar(200)
+  Sand_Code          String?   @db.VarChar(50)
+  CreatedBy          String?   @db.VarChar(10)
+  CreatedDate        DateTime? @default(now(), map: "DF_Filter_Master_CreatedDate") @db.DateTime
+}
+
+model Filter_Transaction {
+  Tran_Id     Int       @id(map: "PK_Filter_Transaction") @default(autoincrement())
+  Filter_Code String    @db.VarChar(50)
+  Part_No     String    @db.VarChar(50)
+  Quantity    Int
+  CreatedBy   String?   @db.VarChar(10)
+  CreatedDate DateTime? @default(now(), map: "DF_Filter_Transaction_CreatedDate") @db.DateTime
+}
+
+model Forecast {
+  ID          Int     @id(map: "PK_Forecast") @default(autoincrement())
+  YearNo      Int?
+  MonthNo     Int?
+  Part_No     String? @db.VarChar(100)
+  Mach_PartNo String? @db.VarChar(100)
+  Assy_PartNo String? @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 1 Int? @map("1")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 2 Int? @map("2")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 3 Int? @map("3")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 4 Int? @map("4")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 5 Int? @map("5")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 6 Int? @map("6")
+}
+
+model Foundry_WeeklyPlan {
+  Id           Int       @id(map: "PK_Foundry_WeeklyPlan") @default(autoincrement())
+  Week_No      Int
+  Year_No      Int
+  Part_Number  String    @db.VarChar(20)
+  BOM_Id       Int?
+  BOM_Code     String?   @db.VarChar(50)
+  Bom_Version  Int?
+  Quantity     Int?
+  Monday       Int?
+  Tuesday      Int?
+  Wednesday    Int?
+  Thursday     Int?
+  Friday       Int?
+  Saturday     Int?
+  Sunday       Int?
+  Created_By   String?   @db.VarChar(50)
+  Created_Date DateTime? @default(now(), map: "DF_Foundry_WeeklyPlan_Created_Date") @db.DateTime
+}
+
+model History {
+  HistoryID   BigInt   @id(map: "PK_History") @default(autoincrement())
+  Description String?  @db.VarChar(Max)
+  Empcode     String?  @db.VarChar(10)
+  CreatedDate DateTime @default(now(), map: "DF_History_CreatedDate") @db.DateTime
+  XmlContent  String?  @db.VarChar(Max)
+  IPAddress   String?  @db.VarChar(20)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Materials {
+  Material_Id          Int       @default(autoincrement())
+  Material_Code        String    @db.VarChar(50)
+  Material_Description String    @db.NVarChar(500)
+  M_ShortName          String?   @db.VarChar(50)
+  Units                String?   @db.VarChar(10)
+  Material_Supply      String?   @db.VarChar(50)
+  LeadTime             String?   @db.VarChar(50)
+  BagQty               Float?
+  CreatedBy            String?   @db.VarChar(10)
+  CreatedDate          DateTime? @default(now(), map: "DF_Materials_CreatedDate") @db.DateTime
+  UpdatedBy            String?   @db.VarChar(10)
+  UpdatedDate          DateTime? @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Mold_Details {
+  ID            Int       @default(autoincrement())
+  Part_No       String    @db.VarChar(50)
+  BOM_Code      String?   @db.VarChar(50)
+  Cast_Wt       Float?
+  PartsPerMold  Int
+  MoldsPerLadle Int
+  MoldWt        Decimal?  @db.Decimal(18, 2)
+  Line          String?   @db.VarChar(50)
+  Frequency     Int?
+  Yield         Float?
+  CreatedBy     String?   @db.VarChar(10)
+  CreatedDate   DateTime? @default(now(), map: "DF_Mold_Details_CreatedDate") @db.DateTime
+  UpdatedBy     String?   @db.VarChar(10)
+  UpdatedDate   DateTime? @db.DateTime
+
+  @@ignore
+}
+
+model Monthly_MaterialWise_Weight {
+  M_Id        BigInt    @id(map: "PK_Monthly_MaterialWise_Weight") @default(autoincrement())
+  Monthyear   String?   @db.VarChar(10)
+  MonthNum    Int?
+  YearNum     Int?
+  Total_Qty   Int?
+  Total_WT    Float?
+  Mate_Name   String?   @db.VarChar(50)
+  CreatedDate DateTime? @default(now(), map: "DF_Monthly_MaterialWise_Weight_CreatedDate") @db.DateTime
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Page_Details {
+  Page_Id          Int       @default(autoincrement())
+  PageName         String    @db.VarChar(100)
+  Page_Description String    @db.VarChar(100)
+  CreatedDate      DateTime? @default(now(), map: "DF_Page_Details_CreatedDate") @db.Date
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model RolesByPage {
+  ID          Int       @default(autoincrement())
+  Empcode     String    @db.VarChar(6)
+  Page_Id     Int
+  CreatedBy   String?   @db.VarChar(6)
+  CreatedDate DateTime? @default(now(), map: "DF_RolesByPage_CreatedDate") @db.DateTime
+
+  @@ignore
+}
+
+model Sleeve_Master {
+  Sleeve_Id          Int       @id(map: "PK_Sleeve_Master") @default(autoincrement())
+  Sleeve_Code        String    @db.VarChar(50)
+  Sleeve_Description String?   @db.VarChar(500)
+  CreatedBy          String?   @db.VarChar(10)
+  CreatedDate        DateTime? @default(now(), map: "DF_Sleeve_Master_CreatedDate") @db.DateTime
+}
+
+model Sleeve_Transaction {
+  Tran_Id     Int       @id(map: "PK_Sleeve_Transaction") @default(autoincrement())
+  Sleeve_Code String    @db.VarChar(50)
+  Part_No     String    @db.VarChar(50)
+  Quantity    Int
+  CreatedBy   String?   @db.VarChar(10)
+  CreatedDate DateTime? @default(now(), map: "DF_Sleeve_Transaction_CreatedDate") @db.DateTime
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B6101A4F40D") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Temp_Forecast {
+  ID          Int     @default(autoincrement())
+  YearNo      Int?
+  MonthNo     Int?
+  Part_No     String? @db.VarChar(100)
+  Mach_PartNo String? @db.VarChar(100)
+  Assy_PartNo String? @db.VarChar(100)
+
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 1 Int? @map("1")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 2 Int? @map("2")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 3 Int? @map("3")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 4 Int? @map("4")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 5 Int? @map("5")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 6 Int? @map("6")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 7 Int? @map("7")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 8 Int? @map("8")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 9 Int? @map("9")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 10 Int? @map("10")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 11 Int? @map("11")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 12 Int? @map("12")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Temp_SF {
+  Part_No     String? @db.VarChar(50)
+  Sleeve_Code String? @db.VarChar(50)
+  Filter_Code String? @db.VarChar(50)
+  Quantity    Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model TempData {
+  Description String?  @db.VarChar(100)
+  Material    String?  @db.VarChar(100)
+  Sep_24      Decimal? @map("Sep 24") @db.Decimal(18, 2)
+  Oct_24      Decimal? @map("Oct 24") @db.Decimal(18, 2)
+  Nov_24      Decimal? @map("Nov 24") @db.Decimal(18, 2)
+  Dec_24      Decimal? @map("Dec 24") @db.Decimal(18, 2)
+  Jan_25      Decimal? @map("Jan 25") @db.Decimal(18, 2)
+  Feb_25      Decimal? @map("Feb 25") @db.Decimal(18, 2)
+  Average     Decimal? @db.Decimal(18, 2)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model TempDataAllMaterials {
+  Description String?  @db.VarChar(100)
+  Material    String?  @db.VarChar(100)
+  Sep_24      Decimal? @map("Sep 24") @db.Decimal(18, 2)
+  Oct_24      Decimal? @map("Oct 24") @db.Decimal(18, 2)
+  Nov_24      Decimal? @map("Nov 24") @db.Decimal(18, 2)
+  Dec_24      Decimal? @map("Dec 24") @db.Decimal(18, 2)
+  Jan_25      Decimal? @map("Jan 25") @db.Decimal(18, 2)
+  Feb_25      Decimal? @map("Feb 25") @db.Decimal(18, 2)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model TempDataMate {
+  Description String?  @db.VarChar(100)
+  Sep_24      Decimal? @map("Sep 24") @db.Decimal(18, 2)
+  Oct_24      Decimal? @map("Oct 24") @db.Decimal(18, 2)
+  Nov_24      Decimal? @map("Nov 24") @db.Decimal(18, 2)
+  Dec_24      Decimal? @map("Dec 24") @db.Decimal(18, 2)
+  Jan_25      Decimal? @map("Jan 25") @db.Decimal(18, 2)
+  Feb_25      Decimal? @map("Feb 25") @db.Decimal(18, 2)
+  Average     Decimal? @db.Decimal(18, 2)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model TempSleeves {
+  Sleeve_Description String? @db.VarChar(100)
+  Sleeve_Code        String? @db.VarChar(100)
+  Sep_24             Int?    @map("Sep 24")
+  Oct_24             Int?    @map("Oct 24")
+  Nov_24             Int?    @map("Nov 24")
+  Dec_24             Int?    @map("Dec 24")
+  Jan_25             Int?    @map("Jan 25")
+  Feb_25             Int?    @map("Feb 25")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Test_Forecast {
+  PartNo    String? @db.VarChar(100)
+  MonthYear Int?
+  UMonth    Int?
+
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 072024 String? @map("072024") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 082024 String? @map("082024") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 092024 String? @map("092024") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 102024 String? @map("102024") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 112024 String? @map("112024") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 122024 String? @map("122024") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 012025 String? @map("012025") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 022025 String? @map("022025") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 032025 String? @map("032025") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 042025 String? @map("042025") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 052025 String? @map("052025") @db.VarChar(100)
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 062025 String? @map("062025") @db.VarChar(100)
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Test_mold {
+  PMC_PartNo    String? @db.VarChar(50)
+  Material      String? @db.VarChar(50)
+  PartsPerMold  Int?
+  MoldWt        Float?
+  Cast_Wt       Float?
+  MoldsPerLadle Int?
+  Cast_PartNo   String? @db.VarChar(50)
+  Line          String? @db.VarChar(50)
+  Frequency     Float?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Testing_F {
+  ID          Int     @default(autoincrement())
+  YearNo      Int?
+  MonthNo     Int?
+  Part_No     String? @db.VarChar(100)
+  Mach_PartNo String? @db.VarChar(100)
+  Assy_PartNo String? @db.VarChar(100)
+
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 1 Int? @map("1")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 2 Int? @map("2")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 3 Int? @map("3")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 4 Int? @map("4")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 5 Int? @map("5")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 6 Int? @map("6")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 7 Int? @map("7")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 8 Int? @map("8")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 9 Int? @map("9")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 10 Int? @map("10")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 11 Int? @map("11")
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  // 12 Int? @map("12")
+  @@ignore
+}
+
+model Warehouse_Issue {
+  WH_Id       Int       @id(map: "PK_Warehouse_Issue") @default(autoincrement())
+  Issue_Date  DateTime  @db.DateTime
+  BOM_Id      Int?
+  BOM_Code    String    @db.VarChar(50)
+  Version_Id  Int
+  ShiftCode   String    @db.VarChar(3)
+  NoofHeats   Int?
+  HeatNo      Int?
+  CreatedBy   String?   @db.VarChar(10)
+  CreatedDate DateTime? @default(now(), map: "DF_Warehouse_Issue_CreatedDate") @db.DateTime
+}
+
+model Warehouse_Stock {
+  ID              Int     @id(map: "PK_Warehouse_Stock") @default(autoincrement())
+  YearNo          Int?
+  WeekNo          Int?
+  Material_Code   String? @db.VarChar(50)
+  Physical_Qty    Float?
+  Pending_Request String? @db.VarChar(50)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model WarehouseStockResults {
+  Material_Code String? @db.VarChar(50)
+  Physical_qty  Int?
+  Total_WT      Int?
+  NoOfBags      Float?
+  Week_No       Int?
+  Year_No       Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Forecast_Transpose {
+  Id          BigInt    @default(autoincrement())
+  PartNo      String?   @db.VarChar(100)
+  UMonth      Int?
+  UYear       Int?
+  MonthYear   String?   @db.VarChar(10)
+  Quantity    Int?
+  CreatedDate DateTime? @default(now(), map: "DF_Forecast_Transpose_CreatedDate") @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model TempFilters {
+  Filter_Description String? @db.VarChar(100)
+  Filter_Code        String? @db.VarChar(100)
+  Sep_24             Int?    @map("Sep 24")
+  Oct_24             Int?    @map("Oct 24")
+  Nov_24             Int?    @map("Nov 24")
+  Dec_24             Int?    @map("Dec 24")
+  Jan_25             Int?    @map("Jan 25")
+  Feb_25             Int?    @map("Feb 25")
+
+  @@ignore
+}

@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --card-background: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  --input-background: #f7f7f7;
+  --input-border: #e0e0e0;
+  --button-background: #007bff;
+  --button-hover-background: #0056b3;
+  --button-text: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --card-background: #1a1a1a;
+    --input-background: #2e2e2e;
+    --input-border: #4e4e4e;
+    --button-background: #201f3d;
+    --button-hover-background: #100f1b;
+    --button-text: #ffffff;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--card-background);
+  box-shadow: 0 4px 8px var(--card-shadow);
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.card-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 16px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.card-content {
+  margin-bottom: 20px;
+}
+
+.input-group {
+  margin-bottom: 12px;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid var(--input-border);
+  background: var(--input-background);
+  color: var(--foreground);
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: var(--button-background);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background: var(--button-background);
+  color: var(--button-text);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.button:hover {
+  background: var(--button-hover-background);
+}
