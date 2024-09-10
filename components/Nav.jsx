@@ -47,6 +47,11 @@ function Nav({ emp_id }) {
     document.body.style.marginLeft = menuOpen ? '0' : '250px';
   };
 
+  const handleCloseMenu = () => {
+    setMenuOpen(false);
+    document.body.style.marginLeft = '0';
+  };
+
   const handleLogoutClick = () => {
     localStorage.removeItem('emp_id');
     setIsLoggedIn(false);
@@ -68,10 +73,11 @@ function Nav({ emp_id }) {
           <h1 className="site-title">GTI</h1>
         </div>
         <ul className={`menu ${menuOpen ? 'open' : 'closed'}`}>
+          <button className="menu-close" onClick={handleCloseMenu}>✖</button>
           <br /><br /><br /><br />
           <li><strong><a href="/">GTI</a></strong></li>
           <li><a href="/foundary_weekly_plan">Foundary Weekly Plan</a></li>
-          <li><a href="/">Forecast</a></li>
+          <li><a href="/ProductMatrix">Product Matrix</a></li>
         </ul>
         <div className="nav-right">
           {isLoggedIn ? (

@@ -176,7 +176,7 @@ const Page = () => {
             placeholder="Search here..."
             value={searchQuery}
             onChange={handleSearchChange}
-          />
+          /><br />
         </div>
       </div>
       <div>
