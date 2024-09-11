@@ -1,6 +1,7 @@
 /* General styles */
 .page-container {
   padding: 20px;
+  width: 95%;
 }
 
 .header-section {
@@ -97,6 +98,7 @@
 
 .pagination-button.active {
   background-color: #0056b3;
+  color: white;
 }
 
 .pagination-button:disabled {
@@ -148,9 +150,11 @@
   opacity: 0.8;
 }
 .psc{
-  display: flex;
+  display: flex; 
   gap: 56%;
 }
+
+
 /* Mobile view */
 @media (max-width: 768px) {
   .header-section {
@@ -235,4 +239,21 @@
     width: 90%;
     max-width: none;
   }
+}
+
+.table-wrapper {
+  max-height: 500px; 
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.product-table {
+  width: 100%; 
+  border-collapse: collapse;
+}
+
+.product-table th, .product-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
 }

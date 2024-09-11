@@ -161,10 +161,9 @@ const Page = () => {
 
   return (
     <div className="container">
-      <Nav />
-      <br /><br /><br /><br />
-      <div className='title_search'>
-        <div className='title'>
+      <Nav /><br /><br /><br /><br /><br />
+      <div className="title_search">
+        <div className="title">
           <h1>Foundary-WeeklyPlan</h1>
         </div>
         <div className="search-container">
@@ -176,11 +175,11 @@ const Page = () => {
             placeholder="Search here..."
             value={searchQuery}
             onChange={handleSearchChange}
-          /><br />
+          />
         </div>
       </div>
-      <div>
-        <select className='selects' onChange={handleItemsPerPageChange} value={itemsPerPage}>
+      <div className="select-container">
+        <select className="selects" onChange={handleItemsPerPageChange} value={itemsPerPage}>
           <option value="1">1 row</option>
           <option value="5">5 rows</option>
           <option value="10">10 rows</option>
@@ -188,99 +187,96 @@ const Page = () => {
           <option value={boms.length}>All</option>
         </select>
       </div>
-      <table className="bom-table">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Week No</th>
-            <th>Year No</th>
-            <th>Part Number</th>
-            <th>BOM Id</th>
-            <th>BOM Code</th>
-            <th>BOM Version</th>
-            <th>Quantity</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-            <th>Saturday</th>
-            <th>Sunday</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {displayedBoms.length > 0 ? (
-            displayedBoms.map((bom) => (
-              <tr key={bom.Id}>
-                <td>{bom.Id}</td>
-                <td>{bom.Week_No}</td>
-                <td>{bom.Year_No}</td>
-                <td>{bom.Part_Number}</td>
-                <td>{bom.BOM_Id}</td>
-                <td>{bom.BOM_Code}</td>
-                <td>{bom.Bom_Version}</td>
-                <td>{bom.Quantity}</td>
-                <td>{bom.Monday}</td>
-                <td>{bom.Tuesday}</td>
-                <td>{bom.Wednesday}</td>
-                <td>{bom.Thursday}</td>
-                <td>{bom.Friday}</td>
-                <td>{bom.Saturday}</td>
-                <td>{bom.Sunday}</td>
-                <td>
-                  <button className="edit-button" onClick={() => handleEdit(bom)}>Edit</button>
-                </td>
-                <td>
-                  <button className="delete-button" onClick={() => handleDelete(bom.Id)}>Delete</button>
-                </td>
+      {loading ? (
+        <div className="spinner">
+          <div className="bounce1"></div>
+          <div className="bounce2"></div>
+          <div className="bounce3"></div>
+        </div>
+      ) : error ? (
+        <div className="error">{error}</div>
+      ) : (
+        <div className="table-container">
+          <table className="bom-table">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Week No</th>
+                <th>Year No</th>
+                <th>Part Number</th>
+                <th>BOM Id</th>
+                <th>BOM Code</th>
+                <th>BOM Version</th>
+                <th>Quantity</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+                <th>Edit</th>
+                <th>Delete</th>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="20">No data available</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      <div className="pagination-status-container">
-        <div className="status-bar">
-          <p>
-            Showing {displayedBoms.length} of {boms.length} rows - Page {currentPage} of {totalPages}
+            </thead>
+            <tbody>
+              {displayedBoms.length > 0 ? (
+                displayedBoms.map((bom) => (
+                  <tr key={bom.Id}>
+                    <td>{bom.Id}</td>
+                    <td>{bom.Week_No}</td>
+                    <td>{bom.Year_No}</td>
+                    <td>{bom.Part_Number}</td>
+                    <td>{bom.BOM_Id}</td>
+                    <td>{bom.BOM_Code}</td>
+                    <td>{bom.Bom_Version}</td>
+                    <td>{bom.Quantity}</td>
+                    <td>{bom.Monday}</td>
+                    <td>{bom.Tuesday}</td>
+                    <td>{bom.Wednesday}</td>
+                    <td>{bom.Thursday}</td>
+                    <td>{bom.Friday}</td>
+                    <td>{bom.Saturday}</td>
+                    <td>{bom.Sunday}</td>
+                    <td>
+                      <button className="edit-button" onClick={() => handleEdit(bom)}>Edit</button>
+                    </td>
+                    <td>
+                      <button className="delete-button" onClick={() => handleDelete(bom.Id)}>Delete</button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="16">No data available</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+      <div className='spb'>
+      <div className="pagination-status">
+      <p>
+      Showing {displayedBoms.length} of {boms.length} rows - Page {currentPage} of {totalPages}
           </p>
-        </div>
-
-        <div className="pagination">
+      </div>
+      <div className="pagination-buttons">
+        <button className="pagination-button" onClick={() => handlePageChange(1)} disabled={currentPage === 1}>First</button>
+        <button className="pagination-button" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+        {getPaginationButtons().map((page, index) => (
           <button
-            className="pagination-button prev-button"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
+            key={index}
+            className={`pagination-button ${page === currentPage ? 'active' : ''}`}
+            onClick={() => page !== '...' && handlePageChange(page)}
+            disabled={page === '...'}
           >
-            &laquo; Previous
+            {page}
           </button>
-          {getPaginationButtons().map((page, index) => (
-            page === '...' ? (
-              <span key={index} className="pagination-dots">...</span>
-            ) : (
-              <button
-                key={index}
-                className={`pagination-button ${currentPage === page ? 'active' : ''}`}
-                onClick={() => handlePageChange(page)}
-              >
-                {page}
-              </button>
-            )
-          ))}
-          <button
-            className="pagination-button next-button"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Next &raquo;
-          </button>
-        </div>
+        ))}
+        <button className="pagination-button" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+        <button className="pagination-button" onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages}>Last</button>
+      </div>
       </div>
 
       {isEditPopupOpen && editBom && (

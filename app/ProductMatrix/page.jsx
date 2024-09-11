@@ -300,9 +300,11 @@ return (
       </table>
     </div><br /><br />
     <div className='psc'>
-    <div class="pagination-info">
-        <span class="pagination-info-text">Showing <span id="rows-shown">10</span> of <span id="total-rows">48</span> rows - Page <span id="current-page">1</span> of <span id="total-pages">5</span></span>
-    </div>
+      <div><br />
+        <span className="pagination-info">
+          Showing {displayedProducts.length} of {products.length} rows - Page {currentPage} of {totalPages}
+        </span>
+      </div>
 
     <div className="pagination-container">
       <button
