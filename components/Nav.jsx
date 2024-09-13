@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import './Nav.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import "./Nav.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function Nav({ emp_id }) {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -13,12 +13,12 @@ function Nav({ emp_id }) {
 
   useEffect(() => {
     const fetchUsername = async () => {
-      const storedEmpId = emp_id || localStorage.getItem('emp_id');
+      const storedEmpId = emp_id || localStorage.getItem("emp_id");
       if (storedEmpId) {
         try {
-          const response = await fetch('http://localhost:3000/api/displayName', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const response = await fetch("http://localhost:3000/api/displayName", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ emp_id: storedEmpId }),
           });
 
@@ -29,7 +29,7 @@ function Nav({ emp_id }) {
             setIsLoggedIn(true);
           } else {
             setIsLoggedIn(false);
-            localStorage.removeItem('emp_id');
+            localStorage.removeItem("emp_id");
           }
         } catch (error) {
           setIsLoggedIn(false);
@@ -44,19 +44,19 @@ function Nav({ emp_id }) {
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
-    document.body.style.marginLeft = menuOpen ? '0' : '250px';
+    document.body.classList.toggle("menu-open");
   };
 
   const handleCloseMenu = () => {
     setMenuOpen(false);
-    document.body.style.marginLeft = '0';
+    document.body.classList.remove("menu-open");
   };
 
   const handleLogoutClick = () => {
-    localStorage.removeItem('emp_id');
+    localStorage.removeItem("emp_id");
     setIsLoggedIn(false);
-    setUsername('');
-    router.push('/');
+    setUsername("");
+    router.push("/");
   };
 
   const toggleDropdown = () => {
@@ -72,12 +72,25 @@ function Nav({ emp_id }) {
           </button>
           <h1 className="site-title">GTI</h1>
         </div>
-        <ul className={`menu ${menuOpen ? 'open' : 'closed'}`}>
-          <button className="menu-close" onClick={handleCloseMenu}>✖</button>
-          <br /><br /><br /><br />
-          <li><strong><a href="/">GTI</a></strong></li>
-          <li><a href="/foundary_weekly_plan">Foundary Weekly Plan</a></li>
-          <li><a href="/ProductMatrix">Product Matrix</a></li>
+        <ul className={`menu ${menuOpen ? "open" : "closed"}`}>
+          {/* <button className="menu-close" onClick={handleCloseMenu}>
+            ✖
+          </button> */}
+          <br />
+          <br />
+          <br />
+          <br />
+          <li>
+            <strong>
+              <a href="/">GTI</a>
+            </strong>
+          </li>
+          <li>
+            <a href="/foundary_weekly_plan">Foundary Weekly Plan</a>
+          </li>
+          <li>
+            <a href="/ProductMatrix">Product Matrix</a>
+          </li>
         </ul>
         <div className="nav-right">
           {isLoggedIn ? (
@@ -87,12 +100,14 @@ function Nav({ emp_id }) {
               </span>
               {dropdownOpen && (
                 <div className="dropdown-menu animate-dropdown">
-                  <button onClick={handleLogoutClick} className="logout-btn">Logout</button>
+                  <button onClick={handleLogoutClick} className="logout-btn">
+                    Logout
+                  </button>
                 </div>
               )}
             </div>
           ) : (
-            <a className="login-btn" href='/'>
+            <a className="login-btn" href="/">
               Login
             </a>
           )}

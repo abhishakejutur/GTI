@@ -9,7 +9,7 @@ body {
   transition: margin-left 0.3s ease; 
 }
 
-.menu-open {
+body.menu-open {
   margin-left: 250px;
 }
 
@@ -79,12 +79,19 @@ body {
 
 .menu li {
   padding: 1rem;
+  width: 100%;
 }
 
 .menu li a {
   color: #fff;
   text-decoration: none;
   display: block;
+  width: 100%;
+  padding: 10px;
+}
+
+.menu li a:hover {
+  background-color: #444;
 }
 
 .nav-right {
@@ -188,6 +195,10 @@ body {
   body.menu-open {
     margin-left: 0; 
   }
+  
+  html, body {
+    overflow-x: hidden;
+  }
 
   .nav-content {
     flex-direction: row;
@@ -225,9 +236,7 @@ body {
     background-color: transparent;
     border: none;
   }
-  .menu-close {
-    display: none;
-  }
+  
   .site-title {
     padding-top: 5px;
     font-size: 1.4rem;
@@ -254,6 +263,7 @@ body {
     font-size: 1.5rem;
     animation: fadeIn 0.4s ease-in-out forwards;
     position: relative;
+    width: 100%;
   }
 
   .menu li:hover {
@@ -299,10 +309,6 @@ body {
   }
 
   .menu.open .menu-toggle {
-    display: block;
-  }
-
-  .menu.open::before {
     display: block;
   }
 

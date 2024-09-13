@@ -1,7 +1,7 @@
 /* General styles */
 .page-container {
   padding: 20px;
-  width: 95%;
+  width: 110%;
 }
 
 .header-section {
@@ -40,7 +40,9 @@
   border: 1px solid #ddd;
   border-radius: 4px;
 }
-
+table{
+  overflow-y: auto;
+}
 .table-wrapper {
   overflow: auto;
 }
@@ -48,6 +50,7 @@
 .product-table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 .product-table th,
@@ -108,24 +111,55 @@
 
 .edit-popup {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 100%;
+  z-index: 1000;
+  animation: popupFadeIn 0.3s ease-out;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .edit-popup-content {
-  background: white;
-  padding: 20px;
-  border-radius: 4px;
-  width: 80%;
-  max-width: 600px;
+  position: relative;
+  padding-left: 5%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+.edit-popup-content label{
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #555;
+}
+.edit-popup-content h2 {
+  margin-top: 0;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
 }
 
+.edit-popup-content input{
+  width: calc(100% - 22px);
+  padding: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.edit-popup-content input:focus{
+  border-color: #4CAF50;
+}
 .edit-popup-buttons {
   display: flex;
   justify-content: flex-end;
@@ -133,13 +167,16 @@
 }
 
 .edit-popup-buttons button {
-  background-color: #007bff;
-  color: white;
-  border: none;
   padding: 10px 20px;
+  border: none;
   border-radius: 4px;
+  font-size: 16px;
   cursor: pointer;
-  margin-left: 10px;
+  color: white;
+  margin-right: 10px;
+  background-color: #4bb14e;
+  transition: background-color 0.3s ease;
+  width: 46%;
 }
 
 .edit-popup-buttons button:last-child {
@@ -242,18 +279,28 @@
 }
 
 .table-wrapper {
-  max-height: 500px; 
-  overflow-y: auto;
-  overflow-x: auto;
+  position: relative;
 }
 
 .product-table {
-  width: 100%; 
-  border-collapse: collapse;
+  display: block;
 }
 
-.product-table th, .product-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: left;
+.product-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f4f4f4;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.product-table tbody {
+  display: block;
+  max-height: 400px; 
+  overflow-y: auto;
+}
+
+.product-table td, .product-table th {
+  min-width: 100px;
 }

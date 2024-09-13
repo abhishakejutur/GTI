@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import './page.css';
-import Nav from '@/components/Nav';
+import '../foundary_weekly_plan/page.css';
 
 const Page = () => {
   const [boms, setBoms] = useState([]);
@@ -160,33 +159,7 @@ const Page = () => {
   }
 
   return (
-    <div className="container">
-      <Nav /><br /><br /><br /><br /><br />
-      <div className="title_search">
-        <div className="title">
-          <h1>Foundary-WeeklyPlan</h1>
-        </div>
-        <div className="search-container">
-          
-          <input
-            id="search"
-            className="search-input"
-            type="search"
-            placeholder="Search here..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-        </div>
-      </div>
-      <div className="select-container">
-        <select className="selects" onChange={handleItemsPerPageChange} value={itemsPerPage}>
-          <option value="1">1 row</option>
-          <option value="5">5 rows</option>
-          <option value="10">10 rows</option>
-          <option value="50">50 rows</option>
-          <option value={boms.length}>All</option>
-        </select>
-      </div>
+    <div className="container"><br /><br /><br /><br /><br />
       {loading ? (
         <div className="spinner">
           <div className="bounce1"></div>
@@ -253,125 +226,6 @@ const Page = () => {
               )}
             </tbody>
           </table>
-        </div>
-      )}
-      <div className='spb'>
-      <div className="pagination-status">
-      <p>
-      Showing {displayedBoms.length} of {boms.length} rows - Page {currentPage} of {totalPages}
-          </p>
-      </div>
-      <div className="pagination-buttons">
-        <button className="pagination-button" onClick={() => handlePageChange(1)} disabled={currentPage === 1}>&lt;&lt;</button>
-        <button className="pagination-button" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>&lt;</button>
-        {getPaginationButtons().map((page, index) => (
-          <button
-            key={index}
-            className={`pagination-button ${page === currentPage ? 'active' : ''}`}
-            onClick={() => page !== '...' && handlePageChange(page)}
-            disabled={page === '...'}
-          >
-            {page}
-          </button>
-        ))}
-        <button className="pagination-button" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>&gt;</button>
-        <button className="pagination-button" onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages}>&gt;&gt;</button>
-      </div>
-      </div>
-
-      {isEditPopupOpen && editBom && (
-        <div className="edit-popup">
-          <div className="popup-content">
-            <h2>Edit BOM</h2>
-
-            <div className='popupID'>
-            <label style={{textAlign:"center", border: "2px solid black", padding:"2%", paddingLeft:"2%"}}>
-              Id:  {editBom.Id}
-              {/* <br /><input name="Id" style={{width:"90%", border}} className="popup-id" value= onChange={handleInputChange} readOnly /> */}
-            </label><br />
-            </div>
-
-            <div className='popfields'>
-            <div className='popleft'>
-            <label>
-              Week No:
-              <input name="Week_No" value={editBom.Week_No} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              Year No:
-              <input name="Year_No" value={editBom.Year_No} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              Part Number:
-              <input name="Part_Number" value={editBom.Part_Number} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              BOM Id:
-              <input name="BOM_Id" value={editBom.BOM_Id} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              BOM Code:
-              <input name="BOM_Code" value={editBom.BOM_Code} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              BOM Version:
-              <input name="Bom_Version" value={editBom.Bom_Version} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              Quantity:
-              <input name="Quantity" value={editBom.Quantity} onChange={handleInputChange} />
-            </label>
-            </div>
-
-            <div className='popright'>
-            <label>
-              Monday:
-              <input name="Monday" value={editBom.Monday} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              Tuesday:
-              <input name="Tuesday" value={editBom.Tuesday} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              Wednesday:
-              <input name="Wednesday" value={editBom.Wednesday} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              Thursday:
-              <input name="Thursday" value={editBom.Thursday} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              Friday:
-              <input name="Friday" value={editBom.Friday} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              Saturday:
-              <input name="Saturday" value={editBom.Saturday} onChange={handleInputChange} />
-            </label>
-
-            <label>
-              Sunday:
-              <input name="Sunday" value={editBom.Sunday} onChange={handleInputChange} />
-            </label>
-            </div>
-            </div>
-
-            <div className='popbuttons'>
-            <button onClick={handleEditSubmit}>Submit</button>
-            <button onClick={() => setIsEditPopupOpen(false)}>Cancel</button>
-            </div>
-          </div>
         </div>
       )}
     </div>
