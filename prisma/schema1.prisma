@@ -2,14 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
-datasource db1 {
+datasource db {
   provider = "sqlserver"
   url      = env("DATABASE_URL1")
 }
-datasource db2 {
-  provider = "sqlserver"
-  url      = env("DATABASE_URL2")
-}
+
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model BOM_Details {

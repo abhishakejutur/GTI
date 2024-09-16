@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import './page.css';
+import '@/components/tables.css';
 import Nav from '@/components/Nav';
 
 const Page = () => {
@@ -282,7 +282,10 @@ const Page = () => {
       {isEditPopupOpen && editBom && (
         <div className="edit-popup">
           <div className="popup-content">
-            <h2>Edit BOM</h2>
+            <div className='close-title'>
+              {/* <span className="close" onClick={() => setIsEditPopupOpen(false)}>&times;</span><br /><br /><br /><br /><br /><br /><br /> */}
+              <h2>Edit BOM</h2>
+            </div>
 
             <div className='popupID'>
             <label style={{textAlign:"center", border: "2px solid black", padding:"2%", paddingLeft:"2%"}}>
@@ -370,7 +373,7 @@ const Page = () => {
             <div className='popbuttons'>
             <button onClick={handleEditSubmit}>Submit</button>
             <button onClick={() => setIsEditPopupOpen(false)}>Cancel</button>
-            </div>
+            </div><br />
           </div>
         </div>
       )}

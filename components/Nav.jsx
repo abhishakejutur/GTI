@@ -9,6 +9,7 @@ function Nav({ emp_id }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [productionPlanningOpen, setProductionPlanningOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -63,6 +64,10 @@ function Nav({ emp_id }) {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const toggleProductionPlanning = () => {
+    setProductionPlanningOpen(!productionPlanningOpen);
+  };
+
   return (
     <nav className="nav">
       <div className="nav-content">
@@ -72,24 +77,23 @@ function Nav({ emp_id }) {
           </button>
           <h1 className="site-title">GTI</h1>
         </div>
-        <ul className={`menu ${menuOpen ? "open" : "closed"}`}>
-          {/* <button className="menu-close" onClick={handleCloseMenu}>
-            ✖
-          </button> */}
-          <br />
-          <br />
-          <br />
-          <br />
+        <ul className={`menu ${menuOpen ? "open" : "closed"}`}><br /><br /><br /><br />
           <li>
             <strong>
-              <a href="/">GTI</a>
+              <h3 style={{textAlign:"left"}}>Green Tech Industries</h3>
             </strong>
-          </li>
-          <li>
-            <a href="/foundary_weekly_plan">Foundary Weekly Plan</a>
-          </li>
-          <li>
-            <a href="/ProductMatrix">Product Matrix</a>
+          </li><br />
+          <li onClick={toggleProductionPlanning} className={`menu-item ${productionPlanningOpen ? "active" : ""}`}>
+            Production Planning 
+            <i className={`icon fas ${productionPlanningOpen ? "fa-chevron-down" : "fa-chevron-right"}`}></i>
+            <ul className={`submenu ${productionPlanningOpen ? "open" : "closed"}`}>
+              <li>
+                <a href="/foundary_weekly_plan">Foundary Weekly Plan</a>
+              </li>
+              <li>
+                <a href="/ProductMatrix">Product Matrix</a>
+              </li>
+            </ul>
           </li>
         </ul>
         <div className="nav-right">

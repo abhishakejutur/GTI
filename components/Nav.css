@@ -6,11 +6,14 @@
 
 body {
   font-family: Arial, sans-serif;
-  transition: margin-left 0.3s ease; 
+  transition: margin-left 0.5s ease, width 0.5s ease;
+  width: 100vw;
+  height: 100vh;
 }
 
 body.menu-open {
   margin-left: 250px;
+  width: calc(100vw - 250px);
 }
 
 .menuLogo {
@@ -25,7 +28,7 @@ body.menu-open {
   width: 100%;
   background-color: #333;
   color: #fff;
-  z-index: 1000; 
+  z-index: 1000;
   display: flex;
   align-items: center;
 }
@@ -36,8 +39,8 @@ body.menu-open {
   align-items: center;
   width: 100%;
   padding: 1rem;
-  position: relative; 
-  z-index: 1010; 
+  position: relative;
+  z-index: 1010;
 }
 
 .menu-toggle {
@@ -46,7 +49,7 @@ body.menu-open {
   color: #fff;
   font-size: 1.5rem;
   cursor: pointer;
-  z-index: 1020; 
+  z-index: 1020;
 }
 
 .site-title {
@@ -62,25 +65,30 @@ body.menu-open {
   position: fixed;
   top: 0;
   left: 0;
-  width: 250px; 
+  width: 250px;
   background-color: #333;
   height: 100%;
   display: none;
   flex-direction: column;
-  transition: transform 0.3s ease; 
-  transform: translateX(-100%); 
-  z-index: 1000; 
+  transition: transform 0.5s ease; 
+  transform: translateX(-100%);
+  z-index: 1000;
 }
 
 .menu.open {
   display: flex;
-  transform: translateX(0); 
+  transform: translateX(0);
 }
 
 .menu li {
   padding: 1rem;
   width: 100%;
 }
+.menu li:hover {
+  background-color: #292929;
+}
+
+
 
 .menu li a {
   color: #fff;
@@ -90,9 +98,9 @@ body.menu-open {
   padding: 10px;
 }
 
-.menu li a:hover {
+/* .menu li a:hover {
   background-color: #444;
-}
+} */
 
 .nav-right {
   display: flex;
@@ -193,9 +201,10 @@ body.menu-open {
 
 @media (max-width: 768px) {
   body.menu-open {
-    margin-left: 0; 
+    margin-left: 0;
+    width: 100vw;
   }
-  
+
   html, body {
     overflow-x: hidden;
   }
@@ -205,11 +214,11 @@ body.menu-open {
     justify-content: space-between;
     padding: 1rem 0.5rem;
   }
-  
+
   .menu {
-    top: 60px; 
-    width: 100vw; 
-    height: 100vh; 
+    top: 60px;
+    width: 100vw;
+    height: 100vh;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 2000;
@@ -221,11 +230,11 @@ body.menu-open {
   }
 
   .menu.open {
-    transform: translateX(0); 
+    transform: translateX(0);
   }
 
   .menu-close {
-    display: block; 
+    display: block;
     position: absolute;
     top: 15px;
     right: 15px;
@@ -236,7 +245,7 @@ body.menu-open {
     background-color: transparent;
     border: none;
   }
-  
+
   .site-title {
     padding-top: 5px;
     font-size: 1.4rem;
@@ -264,6 +273,9 @@ body.menu-open {
     animation: fadeIn 0.4s ease-in-out forwards;
     position: relative;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 2%;
   }
 
   .menu li:hover {
@@ -341,3 +353,60 @@ body.menu-open {
     }
   }
 }
+
+/* Styles for Production Planning submenu */
+
+.menu-item {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+
+.menu-item .icon {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.menu-item.active .icon {
+  transform: rotate(360deg);
+}
+
+.submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  /* background-color: #444; */
+  opacity: 0;
+  visibility: hidden;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.submenu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: scaleY(1);
+}
+
+.submenu li {
+  padding: 1rem;
+  border-bottom: 1px solid #555;
+}
+
+.submenu li a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+}
+
+/* .submenu li a:hover {
+  background-color: #666;
+} */
