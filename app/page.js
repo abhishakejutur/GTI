@@ -39,6 +39,9 @@ export default function Home() {
       if (response.ok) {
         localStorage.setItem('emp_id', empId);
         setIsLoggedIn(true);
+        await fetch('http://localhost:3000/api/generate-schema', {
+          method: 'POST',
+        });
         router.push('/foundary_weekly_plan');
       } else {
         setLoginError(data.error);

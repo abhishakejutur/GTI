@@ -1,0 +1,43 @@
+.selects {
+    border-radius: 5px; 
+    border: 1px solid #ccc;
+    background-color: #f9f9f9; 
+    transition: border-color 0.3s; 
+    width: 10vw;
+  }
+  
+  .selects:hover {
+    border-color: #242424;
+  }
+  
+  input[type="checkbox"] {
+    width: 20px; 
+    height: 20px;
+    cursor: pointer; 
+  }
+  
+  input[type="checkbox"]:checked {
+    accent-color: #1b1b1b; 
+  }
+  
+  .edit-button {
+    padding: 8px 12px; 
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none; 
+    cursor: pointer;
+    transition: background-color 0.3s; 
+  }
+  
+  .edit-button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+  }
+
+  @media only screen and (max-width: 480px) {
+    select.selects {
+            width: 100%;
+    }
+}
+  

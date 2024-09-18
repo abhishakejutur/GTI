@@ -7,203 +7,6 @@ datasource db {
   url      = env("DATABASE_URL2")
 }
 
-model Attendance_Login {
-  SLNo        Int       @id(map: "PK_Attendance_Login") @default(autoincrement())
-  Empcode     String    @db.VarChar(50)
-  DeptCode    String    @db.VarChar(10)
-  NSecCode    String    @db.VarChar(10)
-  Active      Int
-  CreatedDate DateTime? @default(now(), map: "DF_Attendance_Login_CreatedDate") @db.DateTime
-  CreatedBy   String?   @db.VarChar(50)
-  AuthMode    String?   @db.VarChar(50)
-}
-
-model ChildPart {
-  Sl_No               Int     @id(map: "PK__ChildPar__238271E2B3D98F33") @default(autoincrement())
-  Customer            String? @db.VarChar(50)
-  Delivery_Location   String? @db.VarChar(50)
-  Project_Name        String? @db.VarChar(50)
-  Product_Description String? @db.VarChar(50)
-  Casting_Part_No     String? @db.VarChar(50)
-  Machining_Part_No   String? @db.VarChar(50)
-  Assembly_Part_No    String? @db.VarChar(50)
-  chldprt_Part_Number String? @db.VarChar(50)
-  chldprt_ERP_Code    String? @db.VarChar(50)
-  Part_Name           String? @db.VarChar(50)
-  Supplier_Name       String? @db.VarChar(50)
-  Supplier_leadtime   String? @db.VarChar(50)
-  Count               Int?
-  Saftey_Stock        String? @db.VarChar(50)
-  requirement         Int?
-  weeksstock          Float?
-  totalquantity       Float?
-  totalprice          Float?
-  unitprice           Float?
-}
-
-model ChildPart_Details {
-  ID           Int     @id(map: "PK_ChildPart_Details") @default(autoincrement())
-  Cast_PartNo  String? @db.VarChar(20)
-  Mach_PartNo  String? @db.VarChar(20)
-  Assy_PartNo  String? @db.VarChar(20)
-  Child_PartNo String? @db.VarChar(20)
-  Erp_Code     String? @db.VarChar(20)
-}
-
-model ChildPartFiles {
-  File_Id    Int     @id(map: "PK__ChildPar__0FFFC9960EDD7D93") @default(autoincrement())
-  Project_Id Int
-  Type       String  @db.VarChar(100)
-  PartNo     String  @db.VarChar(225)
-  IsChild    Int
-  Status     Int?
-  Part_Rev   String? @db.VarChar(255)
-  Dwg_Rev    String? @db.VarChar(255)
-}
-
-model ChildParts {
-  ChldPt_Id      Int       @id(map: "PK_ChildParts") @default(autoincrement())
-  ChldPt_No      String?   @db.VarChar(100)
-  ChldPt_Name    String?   @db.VarChar(100)
-  ChldPt_Erpcode String?   @db.VarChar(100)
-  ProjectName    Int
-  AssyPtNo       String?   @db.VarChar(50)
-  Supplier       String?   @db.VarChar(100)
-  Location       String?   @db.VarChar(100)
-  POName         String?   @db.VarChar(100)
-  UsedQTY        String?   @db.VarChar(50)
-  DWGrev         String?   @db.VarChar(50)
-  Partrev        String?   @db.VarChar(50)
-  Chld_Type      String?   @db.VarChar(50)
-  CreatedDate    DateTime? @default(now(), map: "CPCDF_Date") @db.DateTime
-  CreatedBy      String?   @db.VarChar(10)
-  UpdatedDate    DateTime? @db.DateTime
-  UpdatedBy      String?   @db.VarChar(10)
-}
-
-model History {
-  HistoryID   BigInt   @id(map: "PK_History") @default(autoincrement())
-  Description String?  @db.VarChar(Max)
-  Empcode     String?  @db.VarChar(10)
-  CreatedDate DateTime @db.DateTime
-  XmlContent  String?  @db.VarChar(Max)
-  IPAddress   String?  @db.VarChar(20)
-}
-
-model HistoryAudit {
-  AuditID     Int       @id(map: "PK__HistoryA__A17F23B856F7ADA1") @default(autoincrement())
-  HistoryID   Int?
-  Description String?   @db.NVarChar(255)
-  Empcode     Int?
-  CreatedDate DateTime? @db.DateTime
-  XmlContent  String?   @db.Xml
-  IPAddress   String?   @db.NVarChar(50)
-  ChangeType  String?   @db.NVarChar(10)
-  ChangeDate  DateTime? @default(now(), map: "DF__HistoryAu__Chang__5EBF139D") @db.DateTime
-  ChangedBy   String?   @db.NVarChar(50)
-}
-
-model HistoryAudit1 {
-  AuditID     Int       @id(map: "PK__HistoryA__A17F23B83E0E073D") @default(autoincrement())
-  HistoryID   Int?
-  Description String?   @db.NVarChar(255)
-  Empcode     Int?
-  CreatedDate DateTime? @db.DateTime
-  XmlContent  String?   @db.Xml
-  IPAddress   String?   @db.NVarChar(50)
-  ChangeType  String?   @db.NVarChar(10)
-  ChangeDate  DateTime? @default(now(), map: "DF__HistoryAu__Chang__6383C8BA") @db.DateTime
-  ChangedBy   String?   @db.NVarChar(50)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Page_Details {
-  Page_Id          Int
-  PageName         String    @db.VarChar(100)
-  Page_Description String    @db.VarChar(100)
-  CreatedDate      DateTime? @db.Date
-
-  @@ignore
-}
-
-model ProductMatrix {
-  Product_Id        Int       @id(map: "PK_ProductMatrix") @default(autoincrement())
-  Project           String?   @db.VarChar(255)
-  Status            String?   @db.VarChar(20)
-  Customer          String?   @db.VarChar(255)
-  PartDesc          String?   @db.VarChar(255)
-  CastRR            Int?
-  MachRR            Int?
-  AssyRR            Int?
-  Location          String?   @db.VarChar(255)
-  Material          String?   @db.VarChar(255)
-  Matl_Rev          String?   @db.VarChar(255)
-  Cast_PartNo       String?   @db.VarChar(255)
-  Cast_Dwg_Rev      String?   @db.VarChar(5)
-  Cast_Part_Rev     String?   @db.VarChar(5)
-  Cast_Wt           Float?
-  Cast_Appr         String?   @db.VarChar(10)
-  Mach_PartNo       String?   @db.VarChar(255)
-  Mach_Dwg_Rev      String?   @db.VarChar(5)
-  Mach_Part_Rev     String?   @db.VarChar(5)
-  Mach_Wt           Float?
-  Mach_Appr         String?   @db.VarChar(10)
-  Assy_PartNo       String?   @db.VarChar(255)
-  Assy_Dwg_Rev      String?   @db.VarChar(5)
-  Assy_Part_Rev     String?   @db.VarChar(5)
-  Assy_Wt           Float?
-  Assy_Appr         String?   @db.VarChar(10)
-  Ship_PartNo       String?   @db.VarChar(255)
-  HS_PartNo         String?   @db.VarChar(255)
-  Proj_Status       String?   @db.VarChar(10)
-  SOP_Date          DateTime? @db.DateTime
-  Pmpd              String?   @db.VarChar(50)
-  Saletype          String?   @db.VarChar(5)
-  InstallCapa       Int?
-  Boxqty            Int?
-  Cust_Material     String?   @db.VarChar(50)
-  Cust_Material_Rev String?   @db.VarChar(5)
-  CreatedDate       DateTime? @default(now(), map: "CDF_Date") @db.DateTime
-  CreatedBy         String?   @db.VarChar(10)
-  UpdatedDate       DateTime? @db.DateTime
-  UpdatedBy         String?   @db.VarChar(10)
-}
-
-model ProjectStatus {
-  Id          Int       @default(autoincrement())
-  Status_Id   Int       @id(map: "PK_Status_Id")
-  Status_Desc String    @db.VarChar(100)
-  CreatedDate DateTime? @default(now(), map: "CPPROJ_Date") @db.DateTime
-  CreatedBy   String?   @db.VarChar(10)
-  UpdatedDate DateTime? @db.DateTime
-  UpdatedBy   String?   @db.VarChar(10)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model RolesByPage {
-  ID          Int
-  Empcode     String    @db.VarChar(6)
-  Page_Id     Int
-  CreatedBy   String?   @db.VarChar(6)
-  CreatedDate DateTime? @db.DateTime
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Test_load {
-  ID           Int     @default(autoincrement())
-  Cast_PartNo  String? @db.VarChar(50)
-  PMC_PartNo   String? @db.VarChar(50)
-  Cast_Wt      Float?
-  Material     String? @db.VarChar(50)
-  Material_Rev String? @db.VarChar(50)
-  Yield        Float?
-  Status       Int?
-
-  @@ignore
-}
-
 model UserMaster {
   UserID       Int       @id(map: "PK_UserMaster") @default(autoincrement())
   RoleId       Int
@@ -219,13 +22,175 @@ model UserMaster {
   AuthMode     String    @db.VarChar(50)
 }
 
+model EFMigrationsHistory {
+  MigrationId    String @id(map: "PK___EFMigrationsHistory") @db.NVarChar(150)
+  ProductVersion String @db.NVarChar(32)
+
+  @@map("__EFMigrationsHistory")
+}
+
+model Data {
+  ProjectName    String  @id(map: "PK_Data") @db.NVarChar(450)
+  ShopName       String? @db.NVarChar(Max)
+  Part           String? @db.NVarChar(Max)
+  PartNumber     String? @db.NVarChar(Max)
+  Pmpd           Float
+  DTA            String? @db.NVarChar(Max)
+  Pcswt          Float
+  Capacity       Int
+  InstalCap      BigInt
+  Cap            BigInt
+  TotalCapacity  BigInt
+  TotalInstalCap BigInt
+  TotalCap       BigInt
+}
+
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model WeekNumbers {
-  Id         Int       @default(autoincrement())
-  YearData   Int?
-  WeekNumber Int?
-  FromDate   DateTime? @db.DateTime
-  ToDate     DateTime? @db.DateTime
+model Master1 {
+  Shopname    String @db.VarChar(50)
+  Projectname String @db.VarChar(50)
+  Part        String @db.VarChar(50)
+  Partnumber  String @db.VarChar(50)
+  PMPD        Float
+  DTA         String @db.VarChar(50)
+  PcsWt       Float
+  InstalCap   BigInt
+  CapWk       BigInt
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model master2 {
+  ShopName    String @db.VarChar(50)
+  ProjectName String @db.VarChar(50)
+  part        String @db.VarChar(50)
+  partnumber  String @db.VarChar(50)
+  Pmpd        Float
+  DTA         String @db.VarChar(50)
+  Pcswt       Float
+  InstalCap   BigInt
+  Cap         BigInt
+  ticap       BigInt
+  tcap        BigInt
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Nithin {
+  ShopName       String? @db.VarChar(50)
+  ProjectName    String? @db.VarChar(50)
+  part           String? @db.VarChar(50)
+  partnumber     String? @db.VarChar(50)
+  Pmpd           Float?
+  DTA            String? @db.VarChar(50)
+  Pcswt          Float?
+  Capacity       Int?
+  InstalCap      BigInt?
+  Cap            BigInt?
+  TotalCapacity  BigInt?
+  TotalInstalCap BigInt?
+  TotalCap       BigInt?
+
+  @@ignore
+}
+
+model Person {
+  Id       Int    @id(map: "PK__Person__3214EC0750E180F5") @default(autoincrement())
+  FullName String @db.NVarChar(100)
+  Email    String @db.NVarChar(100)
+  Address  String @db.NVarChar(200)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model plantable1 {
+  wplan      BigInt?
+  wt         Float?
+  Actual     BigInt?
+  awt        Float?
+  ActMP      Float?
+  partnumber String?   @db.VarChar(50)
+  Date       DateTime? @db.Date
+  percentage Float?
+  shift      String?   @db.VarChar(50)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model quality_data {
+  partname         String    @db.VarChar(50)
+  partnumber       String?   @db.VarChar(50)
+  scrapdate        DateTime? @db.Date
+  rejecteddate     DateTime? @db.Date
+  leakcode         String?   @db.VarChar(50)
+  shift            String?   @db.VarChar(50)
+  shop             String?   @db.VarChar(50)
+  op               Int?
+  Fixture          String?   @db.VarChar(50)
+  found            String?   @db.VarChar(50)
+  defecttype       String?   @db.VarChar(50)
+  Reworkable       String?   @db.VarChar(50)
+  Drawing          String?   @db.VarChar(50)
+  rejreason        String?   @db.VarChar(50)
+  Operator         String?   @db.VarChar(50)
+  Leader           String?   @db.VarChar(50)
+  correctiveaction String?   @db.VarChar(50)
+  targetdate       DateTime? @db.Date
+  status           String?   @db.VarChar(50)
+  Reworkstatus     String?   @db.VarChar(50)
+  Acceptance       String?   @db.VarChar(50)
+
+  @@map("quality data")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model sairam {
+  ShopName       String @db.VarChar(50)
+  ProjectName    String @db.VarChar(50)
+  part           String @db.VarChar(50)
+  partnumber     String @db.VarChar(50)
+  Pmpd           Float
+  DTA            String @db.VarChar(50)
+  Pcswt          Float
+  Capacity       Int
+  InstalCap      BigInt
+  Cap            BigInt
+  TotalCapacity  BigInt
+  TotalInstalCap BigInt
+  TotalCap       BigInt
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model sng {
+  username String @db.VarChar(50)
+  password String @db.VarChar(50)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Page_Details {
+  Page_Id          Int       @default(autoincrement())
+  PageName         String    @db.VarChar(100)
+  Page_Description String    @db.VarChar(100)
+  CreatedDate      DateTime? @default(now(), map: "DF_Page_Details_CreatedDate") @db.Date
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model RolesByPage {
+  ID            Int       @default(autoincrement())
+  Empcode       String    @db.VarChar(6)
+  Page_Id       Int
+  Modify_Access Int
+  CreatedBy     String?   @db.VarChar(6)
+  CreatedDate   DateTime? @default(now(), map: "DF_RolesByPage_CreatedDate") @db.DateTime
 
   @@ignore
 }

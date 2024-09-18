@@ -80,12 +80,14 @@ function Nav({ emp_id }) {
         <ul className={`menu ${menuOpen ? "open" : "closed"}`}><br /><br /><br /><br />
           <li>
             <strong>
-              <h3 style={{textAlign:"left"}}>Green Tech Industries</h3>
+              <a href="/" style={{ textAlign: "left", fontSize:"18px" }}>Green Tech Industries</a>
             </strong>
-          </li><br />
+          </li>
           <li onClick={toggleProductionPlanning} className={`menu-item ${productionPlanningOpen ? "active" : ""}`}>
-            Production Planning 
-            <i className={`icon fas ${productionPlanningOpen ? "fa-chevron-down" : "fa-chevron-right"}`}></i>
+            <div className="icon_submenu">
+              <a>Production Planning</a>
+              <i className={`icon fas ${productionPlanningOpen ? "fa-chevron-down" : "fa-chevron-right"}`}></i>
+            </div>
             <ul className={`submenu ${productionPlanningOpen ? "open" : "closed"}`}>
               <li>
                 <a href="/foundary_weekly_plan">Foundary Weekly Plan</a>
@@ -94,6 +96,9 @@ function Nav({ emp_id }) {
                 <a href="/ProductMatrix">Product Matrix</a>
               </li>
             </ul>
+          </li>
+          <li className="access">
+            <a href="/permissions">Permissions</a>
           </li>
         </ul>
         <div className="nav-right">
