@@ -245,18 +245,31 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    /* background-color: #fff;
-    border: 1px solid #ddd; */
-    border-radius: 8px;
-    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); */
-    padding: 20px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow: auto;
+    transform: translate(-50%, -60%);
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* padding: 20px; */
+    width: 80%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
     z-index: 1000;
-    animation: popupFadeIn 0.3s ease-out;
+    animation: popupSlideIn 0.6s ease-out;
+    border-radius: 10px;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes popupSlideIn {
+    0% {
+      transform: translate(-50%, -80%);
+      opacity: 0;
+    }
+    100% {
+      transform: translate(-50%, -50%);
+      opacity: 1;
+    }
   }
   
   @media (min-width: 1024px) {
