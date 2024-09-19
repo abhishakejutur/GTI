@@ -81,7 +81,7 @@
     overflow: auto;
     max-height: 500px;
     width: 100%;
-    background-color: #ffffff; 
+    background-color: transparent; 
     border: 1px solid #ddd; 
     border-radius: 8px; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
@@ -102,7 +102,9 @@
   }
   
   .bom-table th {
+    border: 1px solid #ddd; 
     background-color: #333; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
     color: white; 
     position: -webkit-sticky;
     position: sticky;

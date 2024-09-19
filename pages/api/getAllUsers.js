@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
   try {
-    const users = await prisma.$queryRaw`SELECT [Username] FROM [UserMaster]`;
+    const users = await prisma.$queryRaw`SELECT [EmployeeId] FROM [UserMaster]`;
 
     res.status(200).json(users);
   } catch (error) {
