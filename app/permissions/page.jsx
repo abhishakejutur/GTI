@@ -28,7 +28,6 @@ const Page = () => {
   const [selectedEmpId, setSelectedEmpId] = useState('');
   const [hasAccess, setHasAccess] = useState(false);
   const [modifyAccess, setModifyAccess] = useState(0);
-  const [permissions, setPermissions] = useState([]);
   const [accessStatus, setAccessStatus] = useState({});
   const router = useRouter();
 
@@ -49,7 +48,7 @@ const Page = () => {
       const data = await response.json();
       setUsers(data);
       await fetchPageData(empId);
-    } catch (error) {
+    } catch {
       setError('Failed to fetch employee data');
       setLoading(false);
     }
@@ -61,13 +60,11 @@ const Page = () => {
       const data = await response.json();
       setPageData(data);
       const permissionsData = data.map(page => ({ id: page.Page_Id, name: page.PageName }));
-      setPermissions(permissionsData);
-
       const pageId = permissionsData.find(p => p.name === 'permissions')?.id;
       if (pageId) {
         await checkPageAccess(empId, pageId);
       }
-    } catch (error) {
+    } catch {
       setError('Failed to fetch page data');
       setLoading(false);
     }
@@ -168,7 +165,7 @@ const Page = () => {
       ...prev,
       [id]: {
         ...prev[id],
-        [type]: !prev[id]?.[type], // Toggle the current value
+        [type]: !prev[id]?.[type],
       },
     }));
   };
@@ -177,37 +174,94 @@ const Page = () => {
     setSelectedEmpId(empId);
     if (empId) {
       try {
-        const response = await fetch('http://localhost:3000/api/empAccess', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ empcode: empId }),
-        });
-
-        if (!response.ok) throw new Error('Failed to fetch access data');
-
-        const data = await response.json();
         const updatedAccessStatus = {};
-
-        // Initialize access status for all boms
-        boms.forEach(bom => {
-          const accessEntry = data.find(item => item.Page_Id === bom.Id);
+        for (const bom of boms) {
+          await fetchAccessData(empId, bom.Id);
           updatedAccessStatus[bom.Id] = {
-            Page_Access: accessEntry ? accessEntry.Page_Access : false, // true/false based on fetched data
-            Modify_Access: accessEntry ? accessEntry.Modify_Access === 1 : false,
+            Page_Access: accessStatus[bom.Id]?.Page_Access || false,
+            Modify_Access: accessStatus[bom.Id]?.Modify_Access || false,
           };
-        });
-
-        // Update access status for all pages
+        }
         setAccessStatus(updatedAccessStatus);
       } catch (error) {
         console.error(error);
       }
     } else {
-      setAccessStatus({}); // Reset if no employee is selected
+      setAccessStatus({});
     }
   };
+
+  const fetchAccessData = async (empId, pageId) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/checkPageAccess', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ emp_id: empId, page_id: pageId }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error fetching access data');
+      }
+
+      const data = await response.json();
+      setAccessStatus(prev => ({
+        ...prev,
+        [pageId]: {
+          Page_Access: data.exists,
+          Modify_Access: data.Modify_Access === 1,
+        },
+      }));
+    } catch (error) {
+      console.error('Error fetching access data:', error);
+    }
+  };
+
+  const accessTypes = [
+    { key: 'Page_Access', label: 'Page Access' },
+    { key: 'Modify_Access', label: 'Modify Access' },
+  ];
+
+  const handleSaveChanges = async () => {
+
+    if (!selectedEmpId) {
+      alert('Please select an Employee ID before saving changes.');
+      return;
+    }
+
+    const permissions = displayedBoms.map((bom, index) => {
+      const pageId = pageData[index]?.Page_Id; 
+      return {
+        pageId: pageId,
+        pageAccess: accessStatus[bom.Id]?.Page_Access ? 1 : 0,
+        modifyAccess: accessStatus[bom.Id]?.Modify_Access ? 1 : 0,
+      };
+    });
+  
+    const empCode = selectedEmpId; 
+    const modifiedBy = localStorage.getItem('emp_id');
+  
+    try {
+      const response = await fetch('/api/savePermissions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ permissions, empCode, modifiedBy }),
+      });
+  
+      if (!response.ok) throw new Error('Failed to save changes');
+      const result = await response.json();
+      alert(result.message);
+    } catch (error) {
+      console.error(error);
+      alert('Error saving changes');
+    }
+  };
+  
+  
 
   return (
     <div className="container">
@@ -233,7 +287,7 @@ const Page = () => {
           <option value="50">50 rows</option>
           <option value={boms.length}>All</option>
         </select>
-        <select className="selects" onChange={(e) => handleEmpIdChange(e.target.value)} value={selectedEmpId}>
+        <select className="selects" onChange={(e) => handleEmpIdChange(e.target.value)} value={selectedEmpId} required>
           <option value="">Select Employee ID</option>
           {users.map(user => (
             <option key={user.EmployeeId} value={user.EmployeeId}>{user.EmployeeId}</option>
@@ -255,8 +309,9 @@ const Page = () => {
               <tr>
                 <th>Page ID</th>
                 <th>Page Name</th>
-                <th>Page Access</th>
-                <th>Modify Access</th>
+                {accessTypes.map(({ label }) => (
+                  <th key={label}>{label}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -264,18 +319,17 @@ const Page = () => {
                 <tr key={bom.Id}>
                   <td>{pageData[index]?.Page_Id}</td>
                   <td>{pageData[index]?.PageName}</td>
-                  <td>
-                    <ToggleSwitch
-                      checked={accessStatus[bom.Id]?.Page_Access || false}
-                      onChange={() => handleCheckboxChange(bom.Id, 'Page_Access')}
-                    />
-                  </td>
-                  <td>
-                    <ToggleSwitch
-                      checked={accessStatus[bom.Id]?.Modify_Access || false}
-                      onChange={() => handleCheckboxChange(bom.Id, 'Modify_Access')}
-                    />
-                  </td>
+                  {accessTypes.map(({ key }) => {
+                    const isChecked = accessStatus[bom.Id]?.[key] || false;
+                    return (
+                      <td key={key}>
+                        <ToggleSwitch
+                          checked={isChecked}
+                          onChange={() => handleCheckboxChange(bom.Id, key)}
+                        />
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
@@ -283,7 +337,7 @@ const Page = () => {
         </div>
       )}
       <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '20px' }}>
-        <button className="edit-button" disabled={!isSaveButtonActive}>Save All Changes</button>
+        <button className="edit-button" onClick={handleSaveChanges} disabled={!isSaveButtonActive}>Save All Changes</button>
       </div>
       <div className='spb'>
         <div className="pagination-status">
