@@ -15,21 +15,70 @@ const Page = () => {
   const [editProduct, setEditProduct] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hasAccess, setHasAccess] = useState(false);
+  const [modifyAccess, setModifyAccess] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const empId = localStorage.getItem('emp_id');
     if (empId) {
       setIsLoggedIn(true);
+      fetchPages(empId);
     } else {
-      setIsLoggedIn(false);
       alert('Please login to access this page.');
-      router.push('/'); 
+      router.push('/');
     }
   }, [router]);
 
+  const fetchPages = async (empId) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/getPages', {
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      });
+      if (!response.ok) throw new Error('Network response was not ok');
+      const pages = await response.json();
+      const defaultPathname = 'ProductMatrix';
+      const pageId = pages.find(page => page.PageName === defaultPathname)?.Page_Id;
+      if (pageId) {
+        checkPageAccess(empId, pageId);
+      } else {
+        alert('Page not found.');
+      }
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+  };
+
+  const checkPageAccess = async (empId, pageId) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/checkPageAccess', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ page_id: pageId, emp_id: empId }),
+      });
+      if (!response.ok) throw new Error('Network response was not ok');
+      const data = await response.json();
+      setHasAccess(data.exists);
+      setModifyAccess(data.Modify_Access === 1);
+      if (!data.exists) {
+        alert('You do not have access to this page.');
+        router.push('/');
+      }
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn || !hasAccess) return;
 
     const fetchProducts = async () => {
       try {
@@ -47,7 +96,7 @@ const Page = () => {
     };
 
     fetchProducts();
-  }, [isLoggedIn]);
+  }, [isLoggedIn, hasAccess]);
 
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -94,7 +143,8 @@ const Page = () => {
     }
   };
 
-  const handleEditSubmit = async () => {
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
     try {
       const response = await fetch('http://10.40.20.98:82/api/Productmatrix', {
         method: 'POST',
@@ -155,7 +205,7 @@ const Page = () => {
     return pageNumbers;
   };
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn || !hasAccess) {
     return null;
   }
 
@@ -196,7 +246,6 @@ const Page = () => {
         <div className="error">{error}</div>
       ) : (
         <div className="table-container">
-          
           <table className="bom-table">
             <thead>
               <tr>
@@ -221,82 +270,87 @@ const Page = () => {
                 <th>Mach Part Rev</th>
                 <th>Mach Weight</th>
                 <th>Mach Approval</th>
-                <th>Assy Part No</th>
-                <th>Assy Drawing Rev</th>
-                <th>Assy Part Rev</th>
-                <th>Assy Weight</th>
-                <th>Assy Approval</th>
+                <th>Assembly Part No</th>
+                <th>Assembly Drawing Rev</th>
+                <th>Assembly Part Rev</th>
+                <th>Assembly Weight</th>
+                <th>Assembly Approval</th>
                 <th>Ship Part No</th>
                 <th>HS Part No</th>
-                <th>Proj Status</th>
-                <th>SO P Date</th>
+                <th>Project Status</th>
+                <th>Sales Order Date</th>
                 <th>PMPD</th>
                 <th>Sale Type</th>
-                <th>Install Capacity</th>
+                <th>Installation Capacity</th>
                 <th>Box Quantity</th>
                 <th>Created By</th>
                 <th>Updated By</th>
                 <th>Created Date</th>
                 <th>Updated Date</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                {modifyAccess && 
+                  <th>Edit</th>
+                }
+                {modifyAccess && 
+                  <th>Delete</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              {displayedProducts.map((product) => (
+                <tr key={product.product_Id}>
+                  <td>{product.product_Id}</td>
+                  <td>{product.project}</td>
+                  <td>{product.status}</td>
+                  <td>{product.customer}</td>
+                  <td>{product.partDesc}</td>
+                  <td>{product.castRR}</td>
+                  <td>{product.machRR}</td>
+                  <td>{product.assyRR}</td>
+                  <td>{product.location}</td>
+                  <td>{product.material}</td>
+                  <td>{product.matl_Rev}</td>
+                  <td>{product.cast_PartNo}</td>
+                  <td>{product.cast_Dwg_Rev}</td>
+                  <td>{product.cast_Part_Rev}</td>
+                  <td>{product.cast_Wt}</td>
+                  <td>{product.cast_Appr}</td>
+                  <td>{product.mach_PartNo}</td>
+                  <td>{product.mach_Dwg_Rev}</td>
+                  <td>{product.mach_Part_Rev}</td>
+                  <td>{product.mach_Wt}</td>
+                  <td>{product.mach_Appr}</td>
+                  <td>{product.assy_PartNo}</td>
+                  <td>{product.assy_Dwg_Rev}</td>
+                  <td>{product.assy_Part_Rev}</td>
+                  <td>{product.assy_Wt}</td>
+                  <td>{product.assy_Appr}</td>
+                  <td>{product.ship_PartNo}</td>
+                  <td>{product.hS_PartNo}</td>
+                  <td>{product.proj_Status}</td>
+                  <td>{product.soP_Date}</td>
+                  <td>{product.pmpd}</td>
+                  <td>{product.saletype}</td>
+                  <td>{product.installCapa}</td>
+                  <td>{product.boxqty}</td>
+                  <td>{product.createdBy}</td>
+                  <td>{product.updatedBy}</td>
+                  <td>{product.createdDate}</td>
+                  <td>{product.updatedDate}</td>
+                  {modifyAccess && (
+                      <td>
+                        <button className='edit-button' onClick={() => handleEdit(product)}>Edit</button>
+                      </td>
+                  )}
+                  {modifyAccess && (
+                      <td>
+                      <button className='delete-button' onClick={() => handleDelete(product.product_Id)}>Delete</button>
+                      </td>
+                  )}
                 </tr>
-              </thead>
-              <tbody>
-                {displayedProducts.length > 0 ? (
-                  displayedProducts.map((product) => (
-                    <tr key={product.product_Id}>
-                      <td>{product.product_Id}</td>
-                      <td><a href="#" target="_blank">{product.project}</a></td>
-                      <td>{product.status}</td>
-                      <td>{product.customer}</td>
-                      <td>{product.partDesc}</td>
-                      <td>{product.castRR}</td>
-                      <td>{product.machRR}</td>
-                      <td>{product.assyRR}</td>
-                      <td>{product.location}</td>
-                      <td>{product.material}</td>
-                      <td>{product.matl_Rev}</td>
-                      <td>{product.cast_PartNo}</td>
-                      <td>{product.cast_Dwg_Rev}</td>
-                      <td>{product.cast_Part_Rev}</td>
-                      <td>{product.cast_Wt}</td>
-                      <td>{product.cast_Appr}</td>
-                      <td>{product.mach_PartNo}</td>
-                      <td>{product.mach_Dwg_Rev}</td>
-                      <td>{product.mach_Part_Rev}</td>
-                      <td>{product.mach_Wt}</td>
-                      <td>{product.mach_Appr}</td>
-                      <td>{product.assy_PartNo}</td>
-                      <td>{product.assy_Dwg_Rev}</td>
-                      <td>{product.assy_Part_Rev}</td>
-                      <td>{product.assy_Wt}</td>
-                      <td>{product.assy_Appr}</td>
-                      <td>{product.ship_PartNo}</td>
-                      <td>{product.hS_PartNo}</td>
-                      <td>{product.proj_Status}</td>
-                      <td>{product.soP_Date}</td>
-                      <td>{product.pmpd}</td>
-                      <td>{product.saletype}</td>
-                      <td>{product.installCapa}</td>
-                      <td>{product.boxqty}</td>
-                      <td>{product.createdBy}</td>
-                      <td>{product.updatedBy}</td>
-                      <td>{product.createdDate}</td>
-                      <td>{product.updatedDate}</td>
-                      <td><button className='edit-button' onClick={() => handleEdit(product)}>Edit</button></td>
-                      <td><button className='delete-button' onClick={() => handleDelete(product.product_Id)}>Delete</button></td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="34">No data available</td>
-                  </tr>
-                )}
-              </tbody>
+              ))}
+            </tbody>
           </table>
         </div>
-
       )}
       <div className='spb'>
         <div className="pagination-status">
@@ -547,8 +601,6 @@ const Page = () => {
       </div>
     
     )}
-    
-
     </div>
   );
 };

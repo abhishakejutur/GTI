@@ -3,7 +3,10 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import '@/components/ui.css';
 import Nav from '@/components/Nav';
-
+import { FileX } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPrint } from '@fortawesome/free-solid-svg-icons';
+import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 const Page = () => {
   const [boms, setBoms] = useState([]);
   const [displayedBoms, setDisplayedBoms] = useState([]);
@@ -16,6 +19,7 @@ const Page = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
+  const [modifyAccess, setModifyAccess] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -65,12 +69,14 @@ const Page = () => {
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setHasAccess(data.exists);
+      setModifyAccess(data.Modify_Access === 1);
       if (!data.exists) {
         alert('You do not have access to this page.');
         router.push('/'); 
       }
     } catch (error) {
       setError(error.message);
+      setLoading(false);
     }
   };
 
@@ -188,6 +194,36 @@ const Page = () => {
     return pageNumbers;
   };
 
+  const handleDownload = async (format) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/FWK_PrintOut?format=${format}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ boms: displayedBoms }),
+      });
+  
+      if (!response.ok) throw new Error('Failed to generate file');
+  
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+  
+      const fileName = format === 'pdf' ? 'Foundary_WeeklyPlan.pdf' : 'Foundary_WeeklyPlan.xlsx';
+      a.download = fileName;
+  
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      alert('Error generating file: ' + error.message);
+    }
+  };
+  
+  
+
   if (!isLoggedIn) {
     return null; 
   }
@@ -210,7 +246,7 @@ const Page = () => {
           />
         </div>
       </div>
-      <div className="select-container">
+      <div className="select-container" style={{display:"flex", justifyContent:"space-between"}}>
         <select className="selects" onChange={handleItemsPerPageChange} value={itemsPerPage}>
           <option value="1">1 row</option>
           <option value="5">5 rows</option>
@@ -218,7 +254,13 @@ const Page = () => {
           <option value="50">50 rows</option>
           <option value={boms.length}>All</option>
         </select>
+        <div style={{display:"flex",  justifyContent:"space-between", gap:"5%"}}>
+
+          <button onClick={() => handleDownload('excel')}><FontAwesomeIcon style={{width:"60px",gap:"2%" , fontSize:"25px", cursor:"pointer"}} icon={faFileExcel} /></button>
+          <button onClick={() => handleDownload('pdf')}><FontAwesomeIcon style={{width:"60px",gap:"2%", fontSize:"25px", cursor:"pointer"}} icon={faPrint} /></button>
+        </div>
       </div>
+      
       {loading ? (
         <div className="spinner">
           <div className="bounce1"></div>
@@ -247,12 +289,12 @@ const Page = () => {
                 <th>Friday</th>
                 <th>Saturday</th>
                 <th>Sunday</th>
-                {hasAccess && (
-                  <>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                  </>
-                )}
+                {modifyAccess && 
+                  <th>Edit</th>
+                }
+                {modifyAccess && 
+                  <th>Delete</th>
+                }
               </tr>
             </thead>
             <tbody>
@@ -274,24 +316,15 @@ const Page = () => {
                     <td>{bom.Friday}</td>
                     <td>{bom.Saturday}</td>
                     <td>{bom.Sunday}</td>
-                    {hasAccess ? (
-                      <>
-                        <td>
-                          <button className="edit-button" onClick={() => handleEdit(bom)}>Edit</button>
-                        </td>
-                        <td>
-                          <button className="delete-button" onClick={() => handleDelete(bom.Id)}>Delete</button>
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td>
-                          <button className="edit-button" style={{ backgroundColor: 'lightgrey' }} disabled>Edit</button>
-                        </td>
-                        <td>
-                          <button className="delete-button" style={{ backgroundColor: 'lightgrey' }} disabled>Delete</button>
-                        </td>
-                      </>
+                    {modifyAccess && (
+                      <td>
+                        <button className='edit-button' onClick={() => handleEdit(bom)}>Edit</button>
+                      </td>
+                    )}
+                    {modifyAccess && (
+                      <td>
+                        <button className='delete-button' onClick={() => handleDelete(bom.Id)}>Delete</button>
+                      </td>
                     )}
                   </tr>
                 ))
